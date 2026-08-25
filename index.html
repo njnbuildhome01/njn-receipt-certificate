@@ -439,7 +439,7 @@ function renderHistory(){
 function esc(v){
   return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
-function js(v){return String(v??"").replaceAll("\","\\").replaceAll("'","\'");}
+function js(v){return String(v??"").replaceAll("\\","\\\\").replaceAll("'","\\'");}
 
 function fillForm(d){
   const map={
