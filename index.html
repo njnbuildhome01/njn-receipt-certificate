@@ -148,38 +148,6 @@ button{border:0;border-radius:7px;padding:11px 16px;font-weight:700;cursor:point
 </div>
 </div>
 
-
-<div class="card no-print">
-  <div class="section-title">⚙️ ตั้งค่า NJN และสำรองข้อมูล</div>
-
-  <div class="grid">
-    <div class="field">
-      <label>ชื่อผู้จ่ายเงินเริ่มต้น / บริษัท</label>
-      <input id="settingsPayerName" value="NJN รับเหมาต่อเติมบ้าน">
-    </div>
-    <div class="field">
-      <label>ตำแหน่งผู้จ่ายเงินเริ่มต้น</label>
-      <input id="settingsPayerPosition">
-    </div>
-  </div>
-
-  <div class="field">
-    <label>ข้อความรับรองเริ่มต้น</label>
-    <textarea id="settingsReason" rows="2">ผู้รับเงินไม่สามารถออกใบเสร็จรับเงินให้ได้</textarea>
-  </div>
-
-  <div class="actions">
-    <button class="btn-green" type="button" onclick="saveSettings()">💾 บันทึกการตั้งค่า</button>
-    <button class="btn-main" type="button" onclick="exportBackup()">⬇️ ส่งออกข้อมูลสำรอง</button>
-    <button class="btn-gray" type="button" onclick="document.getElementById('importFile').click()">⬆️ นำเข้าข้อมูล</button>
-    <input id="importFile" type="file" accept=".json,application/json" hidden onchange="importBackup(event)">
-  </div>
-
-  <div class="small" style="margin-top:10px">
-    ข้อมูลสำรองเป็นไฟล์ .json เก็บไว้ในเครื่องของคุณเอง และใช้กู้คืนประวัติเอกสาร/การตั้งค่าได้
-  </div>
-</div>
-
 <div class="card no-print">
 <div class="section-title">ประวัติเอกสาร</div>
 <input class="history-search" id="historySearch" placeholder="🔎 ค้นหาเลขที่ / ผู้รับเงิน / รายการ" oninput="renderHistory()">
@@ -491,15 +459,14 @@ setTimeout(()=>window.print(),150);
 function newDocument(){
 document.getElementById("docNo").value=nextDocumentNumber();
 document.getElementById("docDate").value=todayISO();
-const s=getSettings();
-  document.getElementById("payerName").value=s.payerName||"NJN รับเหมาต่อเติมบ้าน";
-document.getElementById("payerPosition").value=s.payerPosition||"";
+document.getElementById("payerName").value="NJN รับเหมาต่อเติมบ้าน";
+document.getElementById("payerPosition").value="";
 document.getElementById("recipientName").value="";
 document.getElementById("recipientId").value="";
 document.getElementById("recipientPhone").value="";
 document.getElementById("formNote").value="";
 document.getElementById("paymentMethod").value="เงินสด";
-document.getElementById("reason").value=s.reason||"ผู้รับเงินไม่สามารถออกใบเสร็จรับเงินให้ได้";
+document.getElementById("reason").value="ผู้รับเงินไม่สามารถออกใบเสร็จรับเงินให้ได้";
 document.getElementById("itemRows").innerHTML="";
 evidenceImages=[];
 renderEvidencePreview();
@@ -543,107 +510,9 @@ box.appendChild(img);
 });
 }
 
-
-const SETTINGS_KEY="njn_settings_v5";
-
-function getSettings(){
-  try{
-    return JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}");
-  }catch{
-    return {};
-  }
-}
-
-function loadSettings(){
-  const s=getSettings();
-  document.getElementById("settingsPayerName").value=s.payerName||"NJN รับเหมาต่อเติมบ้าน";
-  document.getElementById("settingsPayerPosition").value=s.payerPosition||"";
-  document.getElementById("settingsReason").value=s.reason||"ผู้รับเงินไม่สามารถออกใบเสร็จรับเงินให้ได้";
-  document.getElementById("payerName").value=s.payerName||"NJN รับเหมาต่อเติมบ้าน";
-  document.getElementById("payerPosition").value=s.payerPosition||"";
-  document.getElementById("reason").value=s.reason||"ผู้รับเงินไม่สามารถออกใบเสร็จรับเงินให้ได้";
-}
-
-function saveSettings(){
-  const s={
-    payerName:document.getElementById("settingsPayerName").value.trim()||"NJN รับเหมาต่อเติมบ้าน",
-    payerPosition:document.getElementById("settingsPayerPosition").value.trim(),
-    reason:document.getElementById("settingsReason").value.trim()||"ผู้รับเงินไม่สามารถออกใบเสร็จรับเงินให้ได้"
-  };
-  localStorage.setItem(SETTINGS_KEY,JSON.stringify(s));
-  loadSettings();
-  alert("บันทึกการตั้งค่าเรียบร้อยแล้ว");
-}
-
-function exportBackup(){
-  const payload={
-    version:5,
-    exportedAt:new Date().toISOString(),
-    settings:getSettings(),
-    documents:getDocuments(),
-    lastNumberKeys:Object.keys(localStorage).filter(k=>k.indexOf("njn_last_number_")===0)
-      .reduce((o,k)=>{o[k]=localStorage.getItem(k);return o;},{})
-  };
-  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json;charset=utf-8"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  const stamp=new Date().toISOString().slice(0,10);
-  a.href=url;
-  a.download="NJN_Receipt_Backup_"+stamp+".json";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
-function importBackup(event){
-  const file=event.target.files[0];
-  if(!file)return;
-
-  const reader=new FileReader();
-  reader.onload=()=>{
-    try{
-      const payload=JSON.parse(reader.result);
-      if(!payload || typeof payload!=="object"){
-        throw new Error("invalid");
-      }
-
-      if(!confirm("นำเข้าข้อมูลสำรองจะเพิ่ม/แทนที่ข้อมูลประวัติในเครื่องนี้ คุณต้องการทำต่อหรือไม่?")){
-        event.target.value="";
-        return;
-      }
-
-      if(Array.isArray(payload.documents)){
-        localStorage.setItem(STORAGE_KEY,JSON.stringify(payload.documents));
-      }
-
-      if(payload.settings && typeof payload.settings==="object"){
-        localStorage.setItem(SETTINGS_KEY,JSON.stringify(payload.settings));
-      }
-
-      if(payload.lastNumberKeys && typeof payload.lastNumberKeys==="object"){
-        Object.entries(payload.lastNumberKeys).forEach(([k,v])=>{
-          if(String(k).startsWith("njn_last_number_")) localStorage.setItem(k,String(v));
-        });
-      }
-
-      loadSettings();
-      newDocument();
-      renderHistory();
-      alert("นำเข้าข้อมูลสำรองเรียบร้อยแล้ว");
-    }catch{
-      alert("ไฟล์สำรองไม่ถูกต้อง หรือไม่ใช่ไฟล์ของระบบ NJN");
-    }finally{
-      event.target.value="";
-    }
-  };
-  reader.readAsText(file,"utf-8");
-}
-
 document.addEventListener("DOMContentLoaded",()=>{
 document.getElementById("docNo").value=nextDocumentNumber();
 document.getElementById("docDate").value=todayISO();
-loadSettings();
 addItem();
 refreshTotals();
 renderDocument(getFormData());
