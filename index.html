@@ -165,7 +165,7 @@ th{background:#f3f5f7;text-align:center}
     <div class="actions">
       <button class="btn-main" onclick="previewDocument()">แสดงเอกสาร</button>
       <button class="btn-green" onclick="saveDocument()">💾 บันทึกเอกสาร</button>
-      <button class="btn-orange" onclick="window.print()">🖨 พิมพ์ / Save PDF</button>
+      <button class="btn-orange" onclick="printCurrentDocument()">🖨 พิมพ์ / Save PDF</button>
       <button class="btn-gray" onclick="newDocument()">➕ เอกสารใหม่</button>
     </div>
   </div>
@@ -471,7 +471,19 @@ function printSaved(docNo){
   loadDocument(docNo);
   setTimeout(()=>window.print(),200);
 }
+function printCurrentDocument() {
+  const data = getFormData();
 
+  if (!validateData(data)) {
+    return;
+  }
+
+  renderDocument(data);
+
+  setTimeout(() => {
+    window.print();
+  }, 150);
+}
 function newDocument(){
   document.getElementById("docNo").value=nextDocumentNumber();
   document.getElementById("docDate").value=todayISO();
