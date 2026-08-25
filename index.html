@@ -1,755 +1,548 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NJN - ใบรับรองแทนใบเสร็จรับเงิน</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NJN - ใบรับรองแทนใบเสร็จรับเงิน V3</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, "Tahoma", sans-serif;
-      background: #f1f3f5;
-      color: #222;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 30px auto;
-      padding: 20px;
-    }
-
-    .form-box {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-      margin-bottom: 30px;
-    }
-
-    h1 {
-      margin-top: 0;
-      color: #1f3a5f;
-      text-align: center;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #777;
-      margin-bottom: 30px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-
-    .field {
-      margin-bottom: 15px;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 15px;
-      font-family: inherit;
-    }
-
-    textarea {
-      resize: vertical;
-    }
-
-    .buttons {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-
-    button {
-      border: none;
-      padding: 12px 22px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: bold;
-    }
-
-    .btn-main {
-      background: #1f3a5f;
-      color: white;
-    }
-
-    .btn-print {
-      background: #e87524;
-      color: white;
-    }
-
-    .btn-clear {
-      background: #777;
-      color: white;
-    }
-
-    .paper {
-      width: 210mm;
-      min-height: 297mm;
-      background: white;
-      margin: auto;
-      padding: 20mm;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.12);
-    }
-
-    .header {
-      text-align: center;
-      border-bottom: 2px solid #1f3a5f;
-      padding-bottom: 15px;
-      margin-bottom: 20px;
-    }
-
-    .header h2 {
-      margin: 0 0 8px;
-      color: #1f3a5f;
-      font-size: 24px;
-    }
-
-    .header h3 {
-      margin: 0;
-      font-size: 20px;
-    }
-
-    .doc-info {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th,
-    td {
-      border: 1px solid #333;
-      padding: 10px;
-      vertical-align: top;
-    }
-
-    th {
-      background: #f2f2f2;
-      text-align: center;
-    }
-
-    .amount {
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .total {
-      font-weight: bold;
-      font-size: 17px;
-    }
-
-    .section {
-      margin-top: 25px;
-    }
-
-    .section-title {
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .signature {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 70px;
-      margin-top: 70px;
-      text-align: center;
-    }
-
-    .signature-line {
-      margin-bottom: 10px;
-    }
-
-    .footer {
-      margin-top: 50px;
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-    }
-
-    @media (max-width: 800px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .paper {
-        width: 100%;
-        min-height: auto;
-        padding: 20px;
-      }
-
-      .doc-info {
-        flex-direction: column;
-        gap: 8px;
-      }
-    }
-
-    @media print {
-      body {
-        background: white;
-      }
-
-      .no-print {
-        display: none !important;
-      }
-
-      .container {
-        margin: 0;
-        padding: 0;
-        max-width: none;
-      }
-
-      .paper {
-        width: 210mm;
-        min-height: 297mm;
-        margin: 0;
-        padding: 15mm;
-        box-shadow: none;
-      }
-
-      @page {
-        size: A4;
-        margin: 0;
-      }
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Tahoma,sans-serif;background:#eef1f5;color:#222}
+.container{max-width:1200px;margin:auto;padding:24px}
+.card{background:#fff;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 4px 18px rgba(0,0,0,.08)}
+h1{margin:0;text-align:center;color:#173b63}
+.subtitle{text-align:center;color:#777;margin:8px 0 24px}
+.section-title{font-size:18px;font-weight:700;color:#173b63;border-left:5px solid #f27b22;padding-left:10px;margin:24px 0 14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{margin-bottom:14px}
+label{display:block;font-weight:700;margin-bottom:6px}
+input,textarea,select{width:100%;padding:11px;border:1px solid #cbd2da;border-radius:7px;font:inherit}
+textarea{resize:vertical}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+button{border:0;border-radius:7px;padding:11px 16px;font-weight:700;cursor:pointer}
+.btn-main{background:#173b63;color:#fff}.btn-orange{background:#f27b22;color:#fff}
+.btn-green{background:#238b45;color:#fff}.btn-gray{background:#6c757d;color:#fff}
+.btn-red{background:#c82333;color:#fff}
+.amount-text{margin-top:7px;color:#173b63;font-weight:700;font-size:14px}
+.paper{width:210mm;min-height:297mm;background:#fff;margin:24px auto;padding:15mm;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.doc-logo{display:block;max-width:125px;max-height:95px;width:auto;height:auto;object-fit:contain;margin:0 auto 8px}
+.doc-header{text-align:center;border-bottom:2px solid #173b63;padding-bottom:14px;margin-bottom:18px}
+.doc-header h2{margin:0 0 6px;color:#173b63;font-size:23px}
+.doc-header h3{margin:0;font-size:19px}
+.doc-info{display:flex;justify-content:space-between;gap:15px;margin-bottom:18px}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{border:1px solid #333;padding:9px;vertical-align:top}
+th{background:#f3f5f7;text-align:center}
+.money{text-align:right;white-space:nowrap}.total{font-weight:700}
+.amount-box{border:1px solid #333;padding:9px;margin-top:8px;font-weight:700}
+.doc-section{margin-top:22px}
+.doc-section-title{font-weight:700;margin-bottom:6px}
+.detail-row{display:grid;grid-template-columns:250px 1fr;gap:10px;margin:5px 0}
+.signature{display:grid;grid-template-columns:1fr 1fr;gap:65px;margin-top:70px;text-align:center}
+.evidence-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+.evidence-grid img{width:100%;height:115px;object-fit:contain;border:1px solid #bbb;border-radius:6px;background:#fafafa}
+.footer{margin-top:38px;text-align:center;font-size:11px;color:#666}
+.history-search{margin-bottom:12px}
+.history-item{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid #ddd;border-radius:8px;padding:11px;margin-bottom:8px}
+.history-info{flex:1}.history-buttons{display:flex;gap:5px;flex-wrap:wrap}.empty{text-align:center;color:#777;padding:18px}
+.small{font-size:12px;color:#777}
+@media(max-width:800px){
+  .grid,.signature,.detail-row{grid-template-columns:1fr}
+  .paper{width:100%;min-height:auto;padding:20px}
+  .doc-info{flex-direction:column}
+  .evidence-grid{grid-template-columns:repeat(2,1fr)}
+  .history-item{flex-direction:column;align-items:stretch}
+}
+@media print{
+  body{background:#fff}
+  .no-print{display:none!important}
+  .container{max-width:none;padding:0}
+  .paper{width:210mm;min-height:297mm;margin:0;box-shadow:none}
+  @page{size:A4;margin:0}
+}
+</style>
 </head>
 
 <body>
-
 <div class="container">
 
-  <!-- ส่วนกรอกข้อมูล -->
-  <div class="form-box no-print">
-
+  <div class="card no-print">
     <h1>NJN ใบรับรองแทนใบเสร็จรับเงิน</h1>
+    <div class="subtitle">ระบบจัดทำเอกสาร NJN V3 — โลโก้อยู่กึ่งกลาง และชื่อผู้จ่าย/ผู้รับแก้ไขได้</div>
 
-    <div class="subtitle">
-      ระบบจัดทำใบรับรองแทนใบเสร็จรับเงิน
-    </div>
-
+    <div class="section-title">ข้อมูลเอกสาร</div>
     <div class="grid">
-
       <div class="field">
         <label>เลขที่เอกสาร</label>
-        <input type="text" id="docNo" placeholder="เช่น RC-2569-0001">
+        <input id="docNo" readonly>
       </div>
-
       <div class="field">
         <label>วันที่</label>
-        <input type="date" id="docDate">
+        <input id="docDate" type="date">
       </div>
-
     </div>
 
-    <div class="field">
-      <label>ชื่อกิจการ / บริษัท</label>
-      <input
-        type="text"
-        id="company"
-        value="NJN รับเหมาต่อเติมบ้าน"
-      >
-    </div>
-
-    <div class="field">
-      <label>ชื่อผู้รับเงิน</label>
-      <input type="text" id="payee" placeholder="กรอกชื่อผู้รับเงิน">
-    </div>
-
+    <div class="section-title">ข้อมูลกิจการ</div>
     <div class="grid">
-
       <div class="field">
-        <label>เลขบัตรประชาชน / เลขประจำตัว</label>
-        <input type="text" id="idNumber">
+        <label>ชื่อกิจการ / บริษัท</label>
+        <input id="company" value="NJN รับเหมาต่อเติมบ้าน">
       </div>
+      <div class="field">
+        <label>เลขประจำตัวผู้เสียภาษี (ถ้ามี)</label>
+        <input id="companyTaxId">
+      </div>
+    </div>
 
+    <div class="section-title">ผู้รับเงิน</div>
+    <div class="grid">
+      <div class="field">
+        <label>ชื่อผู้รับเงิน *</label>
+        <input id="recipientName" placeholder="ชื่อ-นามสกุล">
+      </div>
       <div class="field">
         <label>เบอร์โทรศัพท์</label>
-        <input type="text" id="phone">
+        <input id="recipientPhone">
       </div>
-
     </div>
-
-    <div class="field">
-      <label>ที่อยู่ผู้รับเงิน</label>
-      <textarea id="address" rows="3"></textarea>
-    </div>
-
-    <div class="field">
-      <label>รายการ / รายละเอียดค่าใช้จ่าย</label>
-      <textarea
-        id="description"
-        rows="4"
-        placeholder="เช่น ค่าแรงช่าง, ค่าวัสดุก่อสร้าง, ค่าเดินทาง"
-      ></textarea>
-    </div>
-
     <div class="grid">
-
       <div class="field">
-        <label>จำนวนเงิน (บาท)</label>
-        <input
-          type="number"
-          id="amount"
-          min="0"
-          step="0.01"
-          placeholder="0.00"
-        >
+        <label>เลขบัตรประชาชน / เลขประจำตัว</label>
+        <input id="recipientId">
       </div>
+      <div class="field">
+        <label>ที่อยู่ผู้รับเงิน</label>
+        <input id="recipientAddress">
+      </div>
+    </div>
 
+    <div class="section-title">ผู้จ่ายเงิน</div>
+    <div class="grid">
+      <div class="field">
+        <label>ชื่อผู้จ่ายเงิน *</label>
+        <input id="payerName" value="NJN รับเหมาต่อเติมบ้าน">
+      </div>
+      <div class="field">
+        <label>เลขบัตรประชาชน / เลขประจำตัวผู้จ่าย (ถ้ามี)</label>
+        <input id="payerId">
+      </div>
+    </div>
+
+    <div class="section-title">รายละเอียดค่าใช้จ่าย</div>
+    <div class="field">
+      <label>รายการ / รายละเอียดค่าใช้จ่าย *</label>
+      <textarea id="description" rows="4" placeholder="เช่น ค่าแรงช่าง / ค่าวัสดุก่อสร้าง / ค่าเดินทาง"></textarea>
+    </div>
+    <div class="grid">
+      <div class="field">
+        <label>จำนวนเงิน (บาท) *</label>
+        <input id="amount" type="number" min="0" step="0.01" placeholder="0.00" oninput="updateAmountText()">
+        <div id="amountTextInput" class="amount-text">จำนวนเงินเป็นตัวอักษร: -</div>
+      </div>
       <div class="field">
         <label>วิธีชำระเงิน</label>
-
         <select id="paymentMethod">
-          <option value="เงินสด">เงินสด</option>
-          <option value="โอนเงิน">โอนเงิน</option>
-          <option value="เช็ค">เช็ค</option>
-          <option value="อื่น ๆ">อื่น ๆ</option>
+          <option>เงินสด</option>
+          <option>โอนเงิน</option>
+          <option>เช็ค</option>
+          <option>อื่น ๆ</option>
         </select>
-
       </div>
-
     </div>
 
     <div class="field">
-
       <label>เหตุผลที่ไม่สามารถเรียกใบเสร็จรับเงิน</label>
-
       <textarea id="reason" rows="3">ผู้รับเงินไม่สามารถออกใบเสร็จรับเงินให้ได้</textarea>
-
     </div>
 
-    <div class="buttons">
-
-      <button class="btn-main" onclick="createDocument()">
-        แสดงเอกสาร
-      </button>
-
-      <button class="btn-print" onclick="window.print()">
-        🖨 พิมพ์ / Save PDF
-      </button>
-
-      <button class="btn-clear" onclick="clearForm()">
-        ล้างข้อมูล
-      </button>
-
+    <div class="section-title">รูปภาพหลักฐาน (เลือกได้)</div>
+    <div class="field">
+      <input id="evidence" type="file" accept="image/*" multiple onchange="handleEvidence(event)">
+      <div class="small">ระบบจะย่อภาพอัตโนมัติก่อนบันทึก เพื่อไม่ให้ไฟล์ใหญ่เกินไป</div>
+      <div id="evidencePreview" class="evidence-grid"></div>
     </div>
 
+    <div class="actions">
+      <button class="btn-main" onclick="previewDocument()">แสดงเอกสาร</button>
+      <button class="btn-green" onclick="saveDocument()">💾 บันทึกเอกสาร</button>
+      <button class="btn-orange" onclick="window.print()">🖨 พิมพ์ / Save PDF</button>
+      <button class="btn-gray" onclick="newDocument()">➕ เอกสารใหม่</button>
+    </div>
   </div>
 
+  <div class="card no-print">
+    <div class="section-title">ประวัติเอกสาร</div>
+    <input class="history-search" id="historySearch" placeholder="🔎 ค้นหาเลขที่ / ผู้รับเงิน / รายการ" oninput="renderHistory()">
+    <div id="historyList"></div>
+  </div>
 
-  <!-- เอกสาร A4 -->
   <div class="paper">
-
-    <div class="header">
-
-      <h2 id="outCompany">
-        NJN รับเหมาต่อเติมบ้าน
-      </h2>
-
-      <h3>
-        ใบรับรองแทนใบเสร็จรับเงิน
-      </h3>
-
+    <div class="doc-header">
+      <img class="doc-logo" id="docLogo" src="data:image/png;base64,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" alt="NJN Logo">
+      <h2 id="outCompany">NJN รับเหมาต่อเติมบ้าน</h2>
+      <div id="outTax" class="small"></div>
+      <h3>ใบรับรองแทนใบเสร็จรับเงิน</h3>
     </div>
-
 
     <div class="doc-info">
-
-      <div>
-        <strong>เลขที่เอกสาร:</strong>
-        <span id="outDocNo">-</span>
-      </div>
-
-      <div>
-        <strong>วันที่:</strong>
-        <span id="outDate">-</span>
-      </div>
-
+      <div><strong>เลขที่เอกสาร:</strong> <span id="outDocNo">-</span></div>
+      <div><strong>วันที่:</strong> <span id="outDate">-</span></div>
     </div>
 
-
     <p>
-      ข้าพเจ้า
-      <strong id="outPayee">-</strong>
-      ขอรับรองว่าได้รับเงินจาก
-      <strong id="outCompany2">NJN รับเหมาต่อเติมบ้าน</strong>
+      ข้าพเจ้า <strong id="outRecipient">-</strong>
+      ขอรับรองว่าได้รับเงินจาก <strong id="outPayer">-</strong>
       ตามรายละเอียดดังต่อไปนี้
     </p>
 
-
     <table>
-
       <thead>
-
         <tr>
-
-          <th style="width:55%;">
-            รายการ / รายละเอียด
-          </th>
-
-          <th style="width:20%;">
-            วิธีชำระเงิน
-          </th>
-
-          <th style="width:25%;">
-            จำนวนเงิน (บาท)
-          </th>
-
+          <th style="width:55%">รายการ / รายละเอียด</th>
+          <th style="width:20%">วิธีชำระเงิน</th>
+          <th style="width:25%">จำนวนเงิน (บาท)</th>
         </tr>
-
       </thead>
-
       <tbody>
-
         <tr>
-
-          <td id="outDescription">
-            -
-          </td>
-
-          <td id="outPayment">
-            -
-          </td>
-
-          <td
-            id="outAmount"
-            class="amount"
-          >
-            0.00
-          </td>
-
+          <td id="outDescription">-</td>
+          <td id="outPayment">-</td>
+          <td id="outAmount" class="money">0.00</td>
         </tr>
-
         <tr>
-
-          <td
-            colspan="2"
-            class="amount total"
-          >
-            รวมทั้งสิ้น
-          </td>
-
-          <td
-            id="outTotal"
-            class="amount total"
-          >
-            0.00
-          </td>
-
+          <td colspan="2" class="money total">รวมทั้งสิ้น</td>
+          <td id="outTotal" class="money total">0.00</td>
         </tr>
-
       </tbody>
-
     </table>
 
+    <div class="amount-box">จำนวนเงินเป็นตัวอักษร: <span id="outAmountText">-</span></div>
 
-    <div class="section">
-
-      <div class="section-title">
-        ข้อมูลผู้รับเงิน
-      </div>
-
-      <p>
-        เลขบัตรประชาชน / เลขประจำตัว:
-        <span id="outId">-</span>
-      </p>
-
-      <p>
-        เบอร์โทรศัพท์:
-        <span id="outPhone">-</span>
-      </p>
-
-      <p>
-        ที่อยู่:
-        <span id="outAddress">-</span>
-      </p>
-
+    <div class="doc-section">
+      <div class="doc-section-title">ข้อมูลผู้รับเงิน</div>
+      <div class="detail-row"><div>เลขบัตรประชาชน / เลขประจำตัว</div><div id="outRecipientId">-</div></div>
+      <div class="detail-row"><div>เบอร์โทรศัพท์</div><div id="outRecipientPhone">-</div></div>
+      <div class="detail-row"><div>ที่อยู่</div><div id="outRecipientAddress">-</div></div>
     </div>
 
-
-    <div class="section">
-
-      <div class="section-title">
-        เหตุผลที่ไม่สามารถเรียกใบเสร็จรับเงิน
-      </div>
-
-      <p id="outReason">
-        -
-      </p>
-
+    <div class="doc-section">
+      <div class="doc-section-title">ข้อมูลผู้จ่ายเงิน</div>
+      <div class="detail-row"><div>ชื่อผู้จ่ายเงิน</div><div id="outPayer2">-</div></div>
+      <div class="detail-row"><div>เลขประจำตัว</div><div id="outPayerId">-</div></div>
     </div>
 
-
-    <div class="section">
-
-      <p>
-        ข้าพเจ้าขอรับรองว่ารายการและจำนวนเงินดังกล่าว
-        เป็นความจริง และได้จ่ายเงินตามรายการข้างต้นจริง
-      </p>
-
+    <div class="doc-section">
+      <div class="doc-section-title">เหตุผลที่ไม่สามารถเรียกใบเสร็จรับเงิน</div>
+      <p id="outReason">-</p>
     </div>
 
+    <div class="doc-section">
+      <div class="doc-section-title">รูปภาพหลักฐานประกอบ</div>
+      <div id="outEvidence" class="evidence-grid"></div>
+    </div>
+
+    <div class="doc-section">
+      <p>ข้าพเจ้าขอรับรองว่ารายการและจำนวนเงินดังกล่าวเป็นความจริง และได้จ่ายเงินตามรายการข้างต้นจริง</p>
+    </div>
 
     <div class="signature">
-
       <div>
-
-        <div class="signature-line">
-          ลงชื่อ ................................................
-        </div>
-
-        <div>
-          ผู้รับเงิน
-        </div>
-
-        <br>
-
-        <span id="signPayee">
-          (................................................)
-        </span>
-
+        <p>ลงชื่อ ................................................</p>
+        <p>ผู้รับเงิน</p>
+        <p id="signRecipient">(................................................)</p>
       </div>
-
-
       <div>
-
-        <div class="signature-line">
-          ลงชื่อ ................................................
-        </div>
-
-        <div>
-          ผู้จ่ายเงิน
-        </div>
-
-        <br>
-
-        <span id="signCompany">
-          (NJN รับเหมาต่อเติมบ้าน)
-        </span>
-
+        <p>ลงชื่อ ................................................</p>
+        <p>ผู้จ่ายเงิน</p>
+        <p id="signPayer">(................................................)</p>
       </div>
-
     </div>
 
-
-    <div class="footer">
-
-      เอกสารฉบับนี้จัดทำเพื่อใช้เป็นหลักฐานประกอบการบันทึกบัญชีของกิจการ
-
-    </div>
-
+    <div class="footer">เอกสารฉบับนี้จัดทำเพื่อใช้เป็นหลักฐานประกอบการบันทึกบัญชีของกิจการ</div>
   </div>
-
 </div>
 
-
 <script>
+const STORAGE_KEY="njn_receipt_documents_v3";
+let evidenceImages=[];
 
-function thaiDate(dateString) {
-
-  if (!dateString) {
-    return "-";
-  }
-
-  const date = new Date(dateString);
-
-  const day = date.getDate();
-
-  const monthNames = [
-    "มกราคม",
-    "กุมภาพันธ์",
-    "มีนาคม",
-    "เมษายน",
-    "พฤษภาคม",
-    "มิถุนายน",
-    "กรกฎาคม",
-    "สิงหาคม",
-    "กันยายน",
-    "ตุลาคม",
-    "พฤศจิกายน",
-    "ธันวาคม"
-  ];
-
-  const month = monthNames[date.getMonth()];
-
-  const year = date.getFullYear() + 543;
-
-  return day + " " + month + " " + year;
-
+function todayISO(){
+  const d=new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
 
+function thaiDate(s){
+  if(!s)return "-";
+  const d=new Date(s+"T00:00:00");
+  const m=["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+  return d.getDate()+" "+m[d.getMonth()]+" "+(d.getFullYear()+543);
+}
 
-function formatMoney(number) {
+function nextDocumentNumber(){
+  const year=new Date().getFullYear()+543;
+  const key="njn_last_number_"+year;
+  const n=Number(localStorage.getItem(key)||0)+1;
+  localStorage.setItem(key,String(n));
+  return "RC-"+year+"-"+String(n).padStart(4,"0");
+}
 
-  return Number(number || 0).toLocaleString(
-    "th-TH",
-    {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+function formatMoney(v){
+  return Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function thaiNumberText(amount){
+  amount=Number(amount||0);
+  if(!isFinite(amount))return "-";
+  const baht=Math.floor(amount);
+  const satang=Math.round((amount-baht)*100);
+  const digits=["ศูนย์","หนึ่ง","สอง","สาม","สี่","ห้า","หก","เจ็ด","แปด","เก้า"];
+  const positions=["","สิบ","ร้อย","พัน","หมื่น","แสน"];
+  function readBelowMillion(n){
+    if(n===0)return "";
+    const s=String(n), len=s.length;
+    let t="";
+    for(let i=0;i<len;i++){
+      const d=Number(s[i]), p=len-i-1;
+      if(d===0)continue;
+      if(p===0 && d===1 && len>1)t+="เอ็ด";
+      else if(p===1 && d===1)t+="สิบ";
+      else if(p===1 && d===2)t+="ยี่สิบ";
+      else t+=digits[d]+positions[p];
     }
-  );
-
-}
-
-
-function createDocument() {
-
-  const docNo =
-    document.getElementById("docNo").value;
-
-  const docDate =
-    document.getElementById("docDate").value;
-
-  const company =
-    document.getElementById("company").value;
-
-  const payee =
-    document.getElementById("payee").value;
-
-  const idNumber =
-    document.getElementById("idNumber").value;
-
-  const phone =
-    document.getElementById("phone").value;
-
-  const address =
-    document.getElementById("address").value;
-
-  const description =
-    document.getElementById("description").value;
-
-  const amount =
-    document.getElementById("amount").value;
-
-  const paymentMethod =
-    document.getElementById("paymentMethod").value;
-
-  const reason =
-    document.getElementById("reason").value;
-
-
-  document.getElementById("outDocNo").textContent =
-    docNo || "-";
-
-  document.getElementById("outDate").textContent =
-    thaiDate(docDate);
-
-  document.getElementById("outCompany").textContent =
-    company || "NJN รับเหมาต่อเติมบ้าน";
-
-  document.getElementById("outCompany2").textContent =
-    company || "NJN รับเหมาต่อเติมบ้าน";
-
-  document.getElementById("outPayee").textContent =
-    payee || "-";
-
-  document.getElementById("outId").textContent =
-    idNumber || "-";
-
-  document.getElementById("outPhone").textContent =
-    phone || "-";
-
-  document.getElementById("outAddress").textContent =
-    address || "-";
-
-  document.getElementById("outDescription").textContent =
-    description || "-";
-
-  document.getElementById("outPayment").textContent =
-    paymentMethod;
-
-  document.getElementById("outAmount").textContent =
-    formatMoney(amount);
-
-  document.getElementById("outTotal").textContent =
-    formatMoney(amount);
-
-  document.getElementById("outReason").textContent =
-    reason || "-";
-
-  document.getElementById("signPayee").textContent =
-    "(" + (payee || "................................") + ")";
-
-  document.getElementById("signCompany").textContent =
-    "(" + (company || "NJN รับเหมาต่อเติมบ้าน") + ")";
-
-}
-
-
-function clearForm() {
-
-  document.getElementById("receiptForm")?.reset();
-
-  document.getElementById("docNo").value = "";
-
-  document.getElementById("company").value =
-    "NJN รับเหมาต่อเติมบ้าน";
-
-  document.getElementById("reason").value =
-    "ผู้รับเงินไม่สามารถออกใบเสร็จรับเงินให้ได้";
-
-  document.getElementById("outDocNo").textContent = "-";
-  document.getElementById("outDate").textContent = "-";
-  document.getElementById("outPayee").textContent = "-";
-  document.getElementById("outId").textContent = "-";
-  document.getElementById("outPhone").textContent = "-";
-  document.getElementById("outAddress").textContent = "-";
-  document.getElementById("outDescription").textContent = "-";
-  document.getElementById("outPayment").textContent = "-";
-  document.getElementById("outAmount").textContent = "0.00";
-  document.getElementById("outTotal").textContent = "0.00";
-  document.getElementById("outReason").textContent = "-";
-
-}
-
-
-document.addEventListener(
-  "DOMContentLoaded",
-  function() {
-
-    const today =
-      new Date().toISOString().split("T")[0];
-
-    document.getElementById("docDate").value =
-      today;
-
-    document.getElementById("docNo").value =
-      "RC-" +
-      (new Date().getFullYear() + 543) +
-      "-0001";
-
+    return t;
   }
-);
+  function read(n){
+    if(n<1000000)return readBelowMillion(n);
+    const mil=Math.floor(n/1000000);
+    const rem=n%1000000;
+    return read(mil)+"ล้าน"+(rem?read(rem):"");
+  }
+  let out=read(baht)+"บาท";
+  out+=satang===0?"ถ้วน":readBelowMillion(satang)+"สตางค์";
+  return out;
+}
 
+function updateAmountText(){
+  const v=document.getElementById("amount").value;
+  document.getElementById("amountTextInput").textContent="จำนวนเงินเป็นตัวอักษร: "+thaiNumberText(v);
+}
+
+function getFormData(){
+  return {
+    docNo:document.getElementById("docNo").value,
+    docDate:document.getElementById("docDate").value,
+    company:document.getElementById("company").value,
+    companyTaxId:document.getElementById("companyTaxId").value,
+    recipientName:document.getElementById("recipientName").value,
+    recipientPhone:document.getElementById("recipientPhone").value,
+    recipientId:document.getElementById("recipientId").value,
+    recipientAddress:document.getElementById("recipientAddress").value,
+    payerName:document.getElementById("payerName").value,
+    payerId:document.getElementById("payerId").value,
+    description:document.getElementById("description").value,
+    amount:Number(document.getElementById("amount").value||0),
+    paymentMethod:document.getElementById("paymentMethod").value,
+    reason:document.getElementById("reason").value,
+    evidence:[...evidenceImages]
+  };
+}
+
+function validateData(d){
+  if(!d.recipientName){alert("กรุณากรอกชื่อผู้รับเงิน");return false}
+  if(!d.payerName){alert("กรุณากรอกชื่อผู้จ่ายเงิน");return false}
+  if(!d.description){alert("กรุณากรอกรายละเอียดค่าใช้จ่าย");return false}
+  if(d.amount<=0){alert("กรุณากรอกจำนวนเงิน");return false}
+  return true;
+}
+
+function previewDocument(){
+  const d=getFormData();
+  if(!validateData(d))return;
+  renderDocument(d);
+}
+
+function renderDocument(d){
+  document.getElementById("outCompany").textContent=d.company||"NJN รับเหมาต่อเติมบ้าน";
+  document.getElementById("outTax").textContent=d.companyTaxId?"เลขประจำตัวผู้เสียภาษี: "+d.companyTaxId:"";
+  document.getElementById("outDocNo").textContent=d.docNo||"-";
+  document.getElementById("outDate").textContent=thaiDate(d.docDate);
+  document.getElementById("outRecipient").textContent=d.recipientName||"-";
+  document.getElementById("outPayer").textContent=d.payerName||"-";
+  document.getElementById("outDescription").textContent=d.description||"-";
+  document.getElementById("outPayment").textContent=d.paymentMethod||"-";
+  document.getElementById("outAmount").textContent=formatMoney(d.amount);
+  document.getElementById("outTotal").textContent=formatMoney(d.amount);
+  document.getElementById("outAmountText").textContent=thaiNumberText(d.amount);
+  document.getElementById("outRecipientId").textContent=d.recipientId||"-";
+  document.getElementById("outRecipientPhone").textContent=d.recipientPhone||"-";
+  document.getElementById("outRecipientAddress").textContent=d.recipientAddress||"-";
+  document.getElementById("outPayer2").textContent=d.payerName||"-";
+  document.getElementById("outPayerId").textContent=d.payerId||"-";
+  document.getElementById("outReason").textContent=d.reason||"-";
+  document.getElementById("signRecipient").textContent="("+(d.recipientName||"................................")+")";
+  document.getElementById("signPayer").textContent="("+(d.payerName||"................................")+")";
+  const out=document.getElementById("outEvidence");
+  out.innerHTML="";
+  (d.evidence||[]).forEach(src=>{
+    const img=document.createElement("img");
+    img.src=src; img.alt="หลักฐาน";
+    out.appendChild(img);
+  });
+}
+
+function getDocuments(){
+  try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]")}catch{return[]}
+}
+
+function saveDocument(){
+  const d=getFormData();
+  if(!validateData(d))return;
+  const docs=getDocuments();
+  const idx=docs.findIndex(x=>x.docNo===d.docNo);
+  if(idx>=0)docs[idx]=d; else docs.unshift(d);
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(docs));
+  }catch{
+    alert("พื้นที่เก็บข้อมูลในเบราว์เซอร์เต็ม กรุณาลดจำนวน/ขนาดรูปภาพแล้วลองใหม่");
+    return;
+  }
+  renderDocument(d);
+  renderHistory();
+  alert("บันทึกเอกสาร "+d.docNo+" เรียบร้อยแล้ว");
+}
+
+function renderHistory(){
+  const list=document.getElementById("historyList");
+  const q=document.getElementById("historySearch").value.toLowerCase();
+  const docs=getDocuments().filter(d=>
+    (d.docNo||"").toLowerCase().includes(q) ||
+    (d.recipientName||"").toLowerCase().includes(q) ||
+    (d.description||"").toLowerCase().includes(q)
+  );
+  if(!docs.length){list.innerHTML='<div class="empty">ยังไม่มีประวัติเอกสาร</div>';return}
+  list.innerHTML=docs.map(d=>`
+    <div class="history-item">
+      <div class="history-info">
+        <strong>${esc(d.docNo)}</strong><br>
+        ผู้รับ: ${esc(d.recipientName)}<br>
+        ${thaiDate(d.docDate)} | ${formatMoney(d.amount)} บาท
+      </div>
+      <div class="history-buttons">
+        <button class="btn-main" onclick="loadDocument('${js(d.docNo)}')">เปิด</button>
+        <button class="btn-orange" onclick="printSaved('${js(d.docNo)}')">พิมพ์</button>
+        <button class="btn-red" onclick="deleteDocument('${js(d.docNo)}')">ลบ</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function esc(v){
+  return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+function js(v){return String(v??"").replaceAll("\","\\").replaceAll("'","\'");}
+
+function fillForm(d){
+  const map={
+    docNo:"docNo",docDate:"docDate",company:"company",companyTaxId:"companyTaxId",
+    recipientName:"recipientName",recipientPhone:"recipientPhone",recipientId:"recipientId",
+    recipientAddress:"recipientAddress",payerName:"payerName",payerId:"payerId",
+    description:"description",amount:"amount",paymentMethod:"paymentMethod",reason:"reason"
+  };
+  for(const [k,id] of Object.entries(map))document.getElementById(id).value=d[k]??"";
+  evidenceImages=[...(d.evidence||[])];
+  renderEvidencePreview();
+  updateAmountText();
+  renderDocument(d);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function loadDocument(docNo){
+  const d=getDocuments().find(x=>x.docNo===docNo);
+  if(d)fillForm(d);
+}
+
+function deleteDocument(docNo){
+  if(!confirm("ต้องการลบเอกสาร "+docNo+" ใช่หรือไม่?"))return;
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(getDocuments().filter(x=>x.docNo!==docNo)));
+  renderHistory();
+}
+
+function printSaved(docNo){
+  loadDocument(docNo);
+  setTimeout(()=>window.print(),200);
+}
+
+function newDocument(){
+  document.getElementById("docNo").value=nextDocumentNumber();
+  document.getElementById("docDate").value=todayISO();
+  document.getElementById("company").value="NJN รับเหมาต่อเติมบ้าน";
+  document.getElementById("companyTaxId").value="";
+  document.getElementById("recipientName").value="";
+  document.getElementById("recipientPhone").value="";
+  document.getElementById("recipientId").value="";
+  document.getElementById("recipientAddress").value="";
+  document.getElementById("payerName").value="NJN รับเหมาต่อเติมบ้าน";
+  document.getElementById("payerId").value="";
+  document.getElementById("description").value="";
+  document.getElementById("amount").value="";
+  document.getElementById("paymentMethod").value="เงินสด";
+  document.getElementById("reason").value="ผู้รับเงินไม่สามารถออกใบเสร็จรับเงินให้ได้";
+  evidenceImages=[];
+  renderEvidencePreview();
+  updateAmountText();
+  renderDocument(getFormData());
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function resizeImage(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const img=new Image();
+      img.onload=()=>{
+        const max=1000;
+        const scale=Math.min(1,max/Math.max(img.width,img.height));
+        const canvas=document.createElement("canvas");
+        canvas.width=Math.round(img.width*scale);
+        canvas.height=Math.round(img.height*scale);
+        const ctx=canvas.getContext("2d");
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        resolve(canvas.toDataURL("image/jpeg",0.78));
+      };
+      img.onerror=reject; img.src=reader.result;
+    };
+    reader.onerror=reject; reader.readAsDataURL(file);
+  });
+}
+
+async function handleEvidence(e){
+  const files=[...e.target.files].slice(0,6);
+  try{
+    evidenceImages=await Promise.all(files.map(resizeImage));
+    renderEvidencePreview();
+  }catch{
+    alert("ไม่สามารถอ่านรูปภาพบางไฟล์ได้");
+  }
+}
+
+function renderEvidencePreview(){
+  const box=document.getElementById("evidencePreview");
+  box.innerHTML="";
+  evidenceImages.forEach(src=>{
+    const img=document.createElement("img");
+    img.src=src; img.style.width="120px"; img.style.height="90px"; img.style.objectFit="contain";
+    img.style.border="1px solid #ddd"; img.style.borderRadius="6px"; img.style.background="#fafafa";
+    box.appendChild(img);
+  });
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  document.getElementById("docNo").value=nextDocumentNumber();
+  document.getElementById("docDate").value=todayISO();
+  updateAmountText();
+  renderDocument(getFormData());
+  renderHistory();
+});
 </script>
-
 </body>
 </html>
